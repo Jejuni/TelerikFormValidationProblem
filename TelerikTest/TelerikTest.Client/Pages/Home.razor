@@ -14,6 +14,7 @@
         <FormItem LabelText="Brand" Field="@(nameof(Model.Brand))">
             <Template>
                 <DropDownList TItem="DropDownModel" TValue="int" Data="@_dropDownListData" @bind-Value="@_model.Brand" ValidationFor="() => _model.Brand"/>
+                <TelerikValidationMessage For="() => _model.Brand" />
             </Template>
         </FormItem>
     </FormItems>
