@@ -1,0 +1,54 @@
+﻿@page "/suggestion-one"
+@using TelerikTest.Client.Models
+@using TelerikTest.Client.Components
+@using Blazored.FluentValidation
+
+<PageTitle>Home</PageTitle>
+
+<TelerikForm Model="@_model" OnValidSubmit="Create">
+    <FormValidation>
+        <FluentValidationValidator/>
+    </FormValidation>
+    <FormItems>
+        <FormItem LabelText="Name" Field="@nameof(Model.Name)"/>
+        <FormItem LabelText="Brand" Field="@(nameof(Model.Brand))">
+            <Template>
+                <DropDownList TItem="DropDownModel" TValue="int" Data="@_dropDownListData" Value="@_model.Brand" ValueChanged="@ValueChanged" ValidationFor="() => _model.Brand"/>
+                <TelerikValidationMessage For="() => _model.Brand" />
+            </Template>
+        </FormItem>
+    </FormItems>
+    <FormButtons>
+        <TelerikButton ButtonType="ButtonType.Submit" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary">Save</TelerikButton>
+    </FormButtons>
+</TelerikForm>
+
+@code
+{
+    private readonly Model _model = Model.Empty;
+    private EditContext _editContext;
+    private List<DropDownModel> _dropDownListData = [];
+
+    protected override void OnInitialized()
+    {
+        _editContext = new EditContext(_model);
+        _dropDownListData =
+        [
+            new DropDownModel("Test1", 1),
+            new DropDownModel("Test2", 2),
+        ];
+    }
+
+    private static void Create()
+    {
+        Console.WriteLine("Test");
+    }
+
+    private void ValueChanged(int brandId)
+    {
+        _model.Brand = brandId;
+        _editContext.Validate();
+    }
+
+    internal sealed record DropDownModel(string Text, int Value);
+}
