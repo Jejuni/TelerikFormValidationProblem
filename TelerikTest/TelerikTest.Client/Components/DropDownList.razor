@@ -4,22 +4,22 @@
 
 <label for="@_id" class="k-label k-form-label">DropDown</label>
 <div class="k-form-field-wrap">
-    <TelerikDropDownList DefaultText=" " Id="@_id" Data="@Data" @bind-Value:get="@Value" @bind-Value:set="@ValueChanged">
+    <TelerikDropDownList DefaultText=" " Id="@_id" Data="@Data" Value="@Value" ValueChanged="(TValue v) => ValueChanged.InvokeAsync(v)" ValueExpression="@ValueExpression">
         <DropDownListSettings>
-            <DropDownListPopupSettings Height="auto"/>
+            <DropDownListPopupSettings Height="auto" />
         </DropDownListSettings>
     </TelerikDropDownList>
 
-    @if (ValidationFor is not null)
+    @if (ValueExpression is not null)
     {
-        <TelerikValidationMessage For="@ValidationFor"/>
+        <TelerikValidationMessage For="@ValueExpression" />
     }
 </div>
 
 @code {
     private readonly string _id = Guid.NewGuid().ToString();
 
-    [Parameter] public Expression<Func<TValue>>? ValidationFor { get; set; }
+    [Parameter] public Expression<Func<TValue>>? ValueExpression { get; set; }
 
     [Parameter, EditorRequired] public required IEnumerable<TItem> Data { get; set; }
     [Parameter, EditorRequired] public required TValue Value { get; set; }
